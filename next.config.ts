@@ -1,27 +1,21 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  reactStrictMode: true,
   experimental: {
-    serverExternalPackages: ['nodemailer'],
+    turbo: false, // disable Turbopack completely
   },
   images: {
-    domains: ['images.clerk.dev', 'localhost'],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '**.clerk.dev',
-      },
-      {
-        protocol: 'http',
-        hostname: 'localhost',
+        protocol: "https",
+        hostname: "images.unsplash.com",
       },
     ],
   },
-  typescript: {
-    ignoreBuildErrors: false,
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
+  webpack: (config) => {
+    return config; // keep Webpack as-is
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

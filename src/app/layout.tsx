@@ -19,9 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ClerkProvider
+          publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}
+          // Optional: Add signInUrl/signUpUrl if needed
+        >
           <ConvexClientProvider>
             <ThemeProvider
               attribute="class"
@@ -33,8 +36,8 @@ export default function RootLayout({
               <Toaster position="bottom-right" />
             </ThemeProvider>
           </ConvexClientProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
