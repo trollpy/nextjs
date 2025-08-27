@@ -20,11 +20,30 @@ export const getByCompany = query({
 });
 
 export const getByUser = query({
-  args: { userId: v.id("users") },
+  args: { userId: v.string() }, // Changed from v.id("users") to v.string() for Clerk ID
   handler: async (ctx, args) => {
     return await ctx.db
       .query("workers")
       .withIndex("by_user", (q) => q.eq("userId", args.userId))
+      .first();
+  },
+});
+
+export const getByClerkUserId = query({
+  args: { clerkUserId: v.string() },
+  handler: async (ctx, args) => {
+    // First find the user by their Clerk ID
+    const user = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("id"), args.clerkUserId))
+      .first();
+    
+    if (!user) return null;
+    
+    // Then find the worker record
+    return await ctx.db
+      .query("workers")
+      .filter((q) => q.eq(q.field("userId"), user._id))
       .first();
   },
 });
